@@ -53,6 +53,7 @@ func GenConfigYaml(cmdRequest *CmdRequest) {
 	content += "  modelSuffix: " + cmdRequest.Gen.ModelSuffix + " # model name suffix\n"
 	content += "  source: " + cmdRequest.Gen.Source + " # self-table: struct create by connect mysql tables; local-mapper: struct create by local mappers; db-mapper: struct create by table \"gen_model_mapper\"\n"
 	content += "  persist: " + cmdRequest.Gen.Persist + " # persist struct mappers at local-mapper or db-mapper\n"
+	content += "  prefix:  " + cmdRequest.Gen.Prefix + " # table prefix \n"
 
 	fmt.Print("\ncreate yaml " + fileName)
 	err := writeFile(fileName, content)
