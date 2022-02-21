@@ -28,8 +28,6 @@ func (columnProcessor *columnProcessor) buildImportSegment() {
 }
 
 func mkStructFromSelfTable(tableName string, cmdRequest *CmdRequest) {
-	fmt.Println(cmdRequest.Gen.Prefix)
-	fmt.Println(123123)
 	defer cmdRequest.Wg.Done()
 	dealTable := &(dealTable{})
 	dealTable.TableName = tableName
@@ -146,16 +144,23 @@ func outputStruct(cmdRequest *CmdRequest, columnProcessor *columnProcessor, mode
 	}()
 
 	structName = strings.ToLower(structName)
-	paper = "\ncreate struct " + structName + ".go"
+	// 去掉表前缀的名字
+	newStructName := strings.Replace(structName, cmdRequest.Gen.Prefix, "", -1)
 
-	fileName, existErr := spellGolangFile(modelPath, structName)
+	// 保持 create file
+	paper = "\ncreate struct " + newStructName + ".go"
+
+	fileName, existErr := spellGolangFile(modelPath, newStructName)
+
+	newStructName = camelString(newStructName)
 
 	str := "package " + packageName + "\n\n"
 	str += columnProcessor.ImportSegment
-	str += "\ntype " + structName + " struct {"
+
+	str += "\ntype " + newStructName + " struct {"
 	str += columnProcessor.AttrSegment
 	str += "\n}\n\n"
-	str += "func (model *" + structName + ") TableName() string {\n    return \"" + columnProcessor.TableName + "\"\n}"
+	str += "func (model *" + newStructName + ") TableName() string {\n    return \"" + columnProcessor.TableName + "\"\n}"
 	if existErr != nil {
 		paper += existErr.Error()
 		paper += "\n\n------- print " + structName + " start -------\n"

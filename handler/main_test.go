@@ -94,6 +94,8 @@ func mockRequest() *CmdRequest {
 	genConf := genConfig{SearchTableName: searchTableName, OutDir: modelDir, Source: sourceSelfTable, Persist: sourceLocal}
 	return &CmdRequest{Gen: genConf, Db: dbConf}
 }
+
+// test generate config yaml file
 func (s *gromMockTest) TestGenConfigYaml() {
 	cr := mockRequest()
 	cr.getOutDir()
@@ -102,5 +104,4 @@ func (s *gromMockTest) TestGenConfigYaml() {
 	cr.SetDataByViper()
 	cr.CreateModelStruct()
 	printErrorAndExit(errors.New("test error"))
-
 }
